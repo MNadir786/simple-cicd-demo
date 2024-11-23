@@ -7,37 +7,58 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
+        pipeline {
+    agent any
+
+    environment {
+        DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials' // Jenkins credential ID
+        DOCKER_IMAGE_BACKEND = "MNadir786/backend:${env.BUILD_ID}"
+        DOCKER_IMAGE_FRONTEND = "MNadir786/frontend:${env.BUILD_ID}"
+        REGISTRY = "https://index.docker.io/v1/"
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
                 checkout scm
             }
         }
+
         stage('Build Docker Images') {
             steps {
                 script {
-                    docker.build("${BACKEND_IMAGE}:${env.BUILD_ID}", "./backend")
-                    docker.build("${FRONTEND_IMAGE}:${env.BUILD_ID}", "./frontend")
+                    docker.build(DOCKER_IMAGE_BACKEND, './backend')
+                    docker.build(DOCKER_IMAGE_FRONTEND, './frontend')
                 }
             }
         }
+
         stage('Push Docker Images') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    script {
-                        docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
-                            docker.image("${BACKEND_IMAGE}:${env.BUILD_ID}").push()
-                            docker.image("${FRONTEND_IMAGE}:${env.BUILD_ID}").push()
-                        }
+                script {
+                    docker.withRegistry(REGISTRY, DOCKER_HUB_CREDENTIALS) {
+                        docker.image(DOCKER_IMAGE_BACKEND).push()
+                        docker.image(DOCKER_IMAGE_FRONTEND).push()
                     }
                 }
             }
         }
+
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    script {
-                        sh 'kubectl --kubeconfig=$KUBECONFIG apply -f k8s-deployment.yml'
-                    }
+                script {
+                    // Assuming kubectl is configured on Jenkins server
+                    sh 'kubectl apply -f k8s/backend-deployment.yaml'
+                    sh 'kubectl apply -f k8s/frontend-deployment.yaml'
+                    sh 'kubectl apply -f k8s/service.yaml'
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
         }
     }
 }
