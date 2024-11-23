@@ -6,7 +6,7 @@ This project demonstrates a CI/CD pipeline using Jenkins, Docker, and Kubernetes
 - Deployment of backend and frontend services to Kubernetes.
 - Integration with GitHub via webhooks.
 
-## Project Structure
+# # Project Structure
 
 ```plaintext
 ├── backend/                 # Backend application code
