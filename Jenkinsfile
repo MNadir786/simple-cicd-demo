@@ -2,10 +2,9 @@ pipeline {
     agent any
     environment {
         DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials' // Jenkins credential ID
-        DOCKER_IMAGE_BACKEND = "mnadir786/backend:${env.BUILD_ID}" // Lowercase repository name
-        DOCKER_IMAGE_FRONTEND = "mnadir786/frontend:${env.BUILD_ID}" // Lowercase repository name
-        REGISTRY = "https://index.docker.io/v1/"
-        DOCKER_BUILDKIT = "1" // Enable Docker BuildKit
+        DOCKER_IMAGE_BACKEND = "nadirtech1/backend:${env.BUILD_ID}" // Updated repository name
+        DOCKER_IMAGE_FRONTEND = "nadirtech1/frontend:${env.BUILD_ID}" // Updated repository name
+        REGISTRY = "https://index.docker.io/v1/" // Docker Hub registry URL
     }
 
     stages {
@@ -18,7 +17,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    // Build backend and frontend images with Docker BuildKit enabled
+                    // Build backend and frontend images
                     sh "docker build -t ${DOCKER_IMAGE_BACKEND} ./backend"
                     sh "docker build -t ${DOCKER_IMAGE_FRONTEND} ./frontend"
                 }
