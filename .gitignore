@@ -1,0 +1,35 @@
+# Ignore node_modules and logs
+node_modules/
+*.log
+
+# Ignore build directories
+dist/
+build/
+
+# Ignore environment and configuration files
+.env
+.env.*
+
+# Ignore Docker-related files
+docker-compose.override.yml
+*.swp
+*.bak
+
+# Ignore Kubernetes context and temp files
+*.kubeconfig
+.kube/
+k8s/secrets.yaml  # Example for sensitive k8s files
+
+# Ignore Jenkins workspace and temp files
+.jenkins/
+workspace/
+*.pid
+
+# Ignore IDE/editor configuration
+.vscode/
+.idea/
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
+
