@@ -1,14 +1,5 @@
 pipeline {
     agent any
-    environment {
-        BACKEND_IMAGE = 'nadirtech/backend'
-        FRONTEND_IMAGE = 'nadirtech/frontend'
-    }
-    stages {
-        stage('Clone Repository') {
-            steps {
-        pipeline {
-    agent any
 
     environment {
         DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials' // Jenkins credential ID
@@ -27,6 +18,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
+                    // Build Docker images
                     docker.build(DOCKER_IMAGE_BACKEND, './backend')
                     docker.build(DOCKER_IMAGE_FRONTEND, './frontend')
                 }
@@ -36,6 +28,7 @@ pipeline {
         stage('Push Docker Images') {
             steps {
                 script {
+                    // Use Jenkins credentials store to authenticate with Docker Hub
                     docker.withRegistry(REGISTRY, DOCKER_HUB_CREDENTIALS) {
                         docker.image(DOCKER_IMAGE_BACKEND).push()
                         docker.image(DOCKER_IMAGE_FRONTEND).push()
@@ -47,7 +40,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Assuming kubectl is configured on Jenkins server
+                    // Deploy to Kubernetes using kubectl
                     sh 'kubectl apply -f k8s/backend-deployment.yaml'
                     sh 'kubectl apply -f k8s/frontend-deployment.yaml'
                     sh 'kubectl apply -f k8s/service.yaml'
@@ -58,7 +51,7 @@ pipeline {
 
     post {
         always {
-            cleanWs()
+            cleanWs() // Clean up workspace
         }
     }
 }
