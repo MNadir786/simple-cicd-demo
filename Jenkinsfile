@@ -42,7 +42,7 @@ pipeline {
             steps {
                 script {
                     // Ensure kubectl is configured with the correct kubeconfig file
-                    sh 'kubectl config use-context <your-cluster-context>' // Replace with your actual cluster context if needed
+                    sh 'kubectl config use-context kubernetes-admin@kubernetes' // Replace with your actual cluster context if needed
                     sh 'kubectl apply -f k8s/backend-deployment.yaml'
                     sh 'kubectl apply -f k8s/frontend-deployment.yaml'
                     sh 'kubectl apply -f k8s/service.yaml'
