@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: nadirtech1/frontend:latest
+        image: nadirtech1/frontend:${BUILD_ID}
         ports:
         - containerPort: 80
 

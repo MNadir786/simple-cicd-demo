@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: nadirtech1/backend:latest
+        image: nadirtech1/backend:${BUILD_ID}
         ports:
         - containerPort: 5000
 
