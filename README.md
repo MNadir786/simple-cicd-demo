@@ -1,4 +1,4 @@
-# CI/CD Pipeline with Jenkins, Docker, and Kubernetes
+#  CI/CD Pipeline with Jenkins, Docker, and Kubernetes
 
 This project demonstrates a CI/CD pipeline using Jenkins, Docker, and Kubernetes. The pipeline includes:
 
